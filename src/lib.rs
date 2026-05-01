@@ -13,6 +13,9 @@ impl Guest for Component {
         config: ConnectionConfig,
         project_path: String,
     ) -> Result<Vec<String>, String> {
+        let proxy_url = std::env::var("TOFUYA_PROXY_URL")
+            .ok();
+
         let query = format!(
             r#"query {{ project(fullPath: "{project_path}") {{ terraformStates {{ nodes {{ name }} }} }} }}"#
         );
@@ -28,12 +31,19 @@ impl Guest for Component {
             headers_list.push(("Authorization", format!("Bearer {}", token).into_bytes()));
         }
 
+        let destination_url = if let Some(proxy_url) = proxy_url {
+            headers_list.push(("X-Target-Url", config.api_url.into_bytes()));
+            proxy_url
+        } else {
+            config.api_url
+        };
+
         let response = Client::new()
-            .post(config.api_url.as_str())
+            .post(destination_url.as_str())
             .headers(headers_list)
             .body(payload.as_bytes())
             .send()
-            .map_err(|_| "failed to send request")?;
+            .map_err(|e| format!("failed to send request: {}", e))?;
 
         if response.status_code() < 200 || response.status_code() >= 300 {
             return Err(format!(
