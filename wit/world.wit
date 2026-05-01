@@ -1,0 +1,9 @@
+package component:tofuya-wasi-gitlab;
+
+interface tofu {
+    get-state-names: func(api-url: string, project-path: string, auth-token: option<string>) -> result<list<string>, string>;
+}
+
+world tofuya-gitlab {
+    export tofu;
+}
