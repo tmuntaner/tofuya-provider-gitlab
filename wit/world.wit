@@ -1,9 +1,14 @@
-package component:tofuya-wasi-gitlab;
+package tofuya:provider-gitlab;
 
-interface tofu {
-    get-state-names: func(api-url: string, project-path: string, auth-token: option<string>) -> result<list<string>, string>;
+interface gitlab-terraform-api {
+    record connection-config {
+        api-url: string,
+        auth-token: option<string>,
+    }
+
+    get-state-names: func(config: connection-config, project-path: string) -> result<list<string>, string>;
 }
 
-world tofuya-gitlab {
-    export tofu;
+world gitlab-provider {
+    export gitlab-terraform-api;
 }

@@ -1,5 +1,5 @@
 [package]
-name = "tofuya-wasi-gitlab"
+name = "tofuya-provider-gitlab"
 version = "0.1.0"
 edition = "2024"
 
@@ -13,6 +13,6 @@ waki = { version = "0.5.1", features = ["json", "multipart"] }
 crate-type = ["cdylib"]
 
 [package.metadata.component]
-package = "component:tofuya-wasi-gitlab"
+package = "component:tofuya-provider-gitlab"
 
 [package.metadata.component.dependencies]

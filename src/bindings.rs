@@ -4,49 +4,67 @@
 #[rustfmt::skip]
 #[allow(dead_code, clippy::all)]
 pub mod exports {
-    pub mod component {
-        pub mod tofuya_wasi_gitlab {
+    pub mod tofuya {
+        pub mod provider_gitlab {
             #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-            pub mod tofu {
+            pub mod gitlab_terraform_api {
                 #[used]
                 #[doc(hidden)]
                 static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
                 use super::super::super::super::_rt;
+                #[derive(Clone)]
+                pub struct ConnectionConfig {
+                    pub api_url: _rt::String,
+                    pub auth_token: Option<_rt::String>,
+                }
+                impl ::core::fmt::Debug for ConnectionConfig {
+                    fn fmt(
+                        &self,
+                        f: &mut ::core::fmt::Formatter<'_>,
+                    ) -> ::core::fmt::Result {
+                        f.debug_struct("ConnectionConfig")
+                            .field("api-url", &self.api_url)
+                            .field("auth-token", &self.auth_token)
+                            .finish()
+                    }
+                }
                 #[doc(hidden)]
                 #[allow(non_snake_case)]
                 pub unsafe fn _export_get_state_names_cabi<T: Guest>(
                     arg0: *mut u8,
                     arg1: usize,
-                    arg2: *mut u8,
-                    arg3: usize,
-                    arg4: i32,
+                    arg2: i32,
+                    arg3: *mut u8,
+                    arg4: usize,
                     arg5: *mut u8,
                     arg6: usize,
                 ) -> *mut u8 {
                     #[cfg(target_arch = "wasm32")] _rt::run_ctors_once();
                     let len0 = arg1;
                     let bytes0 = _rt::Vec::from_raw_parts(arg0.cast(), len0, len0);
-                    let len1 = arg3;
-                    let bytes1 = _rt::Vec::from_raw_parts(arg2.cast(), len1, len1);
+                    let len2 = arg6;
+                    let bytes2 = _rt::Vec::from_raw_parts(arg5.cast(), len2, len2);
                     let result3 = T::get_state_names(
-                        _rt::string_lift(bytes0),
-                        _rt::string_lift(bytes1),
-                        match arg4 {
-                            0 => None,
-                            1 => {
-                                let e = {
-                                    let len2 = arg6;
-                                    let bytes2 = _rt::Vec::from_raw_parts(
-                                        arg5.cast(),
-                                        len2,
-                                        len2,
-                                    );
-                                    _rt::string_lift(bytes2)
-                                };
-                                Some(e)
-                            }
-                            _ => _rt::invalid_enum_discriminant(),
+                        ConnectionConfig {
+                            api_url: _rt::string_lift(bytes0),
+                            auth_token: match arg2 {
+                                0 => None,
+                                1 => {
+                                    let e = {
+                                        let len1 = arg4;
+                                        let bytes1 = _rt::Vec::from_raw_parts(
+                                            arg3.cast(),
+                                            len1,
+                                            len1,
+                                        );
+                                        _rt::string_lift(bytes1)
+                                    };
+                                    Some(e)
+                                }
+                                _ => _rt::invalid_enum_discriminant(),
+                            },
                         },
+                        _rt::string_lift(bytes2),
                     );
                     let ptr4 = (&raw mut _RET_AREA.0).cast::<u8>();
                     match result3 {
@@ -148,29 +166,28 @@ pub mod exports {
                 }
                 pub trait Guest {
                     fn get_state_names(
-                        api_url: _rt::String,
+                        config: ConnectionConfig,
                         project_path: _rt::String,
-                        auth_token: Option<_rt::String>,
                     ) -> Result<_rt::Vec<_rt::String>, _rt::String>;
                 }
                 #[doc(hidden)]
-                macro_rules! __export_component_tofuya_wasi_gitlab_tofu_cabi {
+                macro_rules! __export_tofuya_provider_gitlab_gitlab_terraform_api_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
                         const _ : () = { #[unsafe (export_name =
-                        "component:tofuya-wasi-gitlab/tofu#get-state-names")] unsafe
-                        extern "C" fn export_get_state_names(arg0 : * mut u8, arg1 :
-                        usize, arg2 : * mut u8, arg3 : usize, arg4 : i32, arg5 : * mut
+                        "tofuya:provider-gitlab/gitlab-terraform-api#get-state-names")]
+                        unsafe extern "C" fn export_get_state_names(arg0 : * mut u8, arg1
+                        : usize, arg2 : i32, arg3 : * mut u8, arg4 : usize, arg5 : * mut
                         u8, arg6 : usize,) -> * mut u8 { unsafe { $($path_to_types)*::
                         _export_get_state_names_cabi::<$ty > (arg0, arg1, arg2, arg3,
                         arg4, arg5, arg6) } } #[unsafe (export_name =
-                        "cabi_post_component:tofuya-wasi-gitlab/tofu#get-state-names")]
+                        "cabi_post_tofuya:provider-gitlab/gitlab-terraform-api#get-state-names")]
                         unsafe extern "C" fn _post_return_get_state_names(arg0 : * mut
                         u8,) { unsafe { $($path_to_types)*::
                         __post_return_get_state_names::<$ty > (arg0) } } };
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_tofuya_wasi_gitlab_tofu_cabi;
+                pub(crate) use __export_tofuya_provider_gitlab_gitlab_terraform_api_cabi;
                 #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
                 #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
                 struct _RetArea(
@@ -189,6 +206,7 @@ pub mod exports {
 #[rustfmt::skip]
 mod _rt {
     #![allow(dead_code, clippy::all)]
+    pub use alloc_crate::string::String;
     #[cfg(target_arch = "wasm32")]
     pub fn run_ctors_once() {
         wit_bindgen_rt::run_ctors_once();
@@ -216,7 +234,6 @@ mod _rt {
         let layout = alloc::Layout::from_size_align_unchecked(size, align);
         alloc::dealloc(ptr, layout);
     }
-    pub use alloc_crate::string::String;
     extern crate alloc as alloc_crate;
 }
 /// Generates `#[unsafe(no_mangle)]` functions to export the specified type as
@@ -237,30 +254,33 @@ mod _rt {
 /// ```
 #[allow(unused_macros)]
 #[doc(hidden)]
-macro_rules! __export_tofuya_gitlab_impl {
+macro_rules! __export_gitlab_provider_impl {
     ($ty:ident) => {
         self::export!($ty with_types_in self);
     };
     ($ty:ident with_types_in $($path_to_types_root:tt)*) => {
         $($path_to_types_root)*::
-        exports::component::tofuya_wasi_gitlab::tofu::__export_component_tofuya_wasi_gitlab_tofu_cabi!($ty
+        exports::tofuya::provider_gitlab::gitlab_terraform_api::__export_tofuya_provider_gitlab_gitlab_terraform_api_cabi!($ty
         with_types_in $($path_to_types_root)*::
-        exports::component::tofuya_wasi_gitlab::tofu);
+        exports::tofuya::provider_gitlab::gitlab_terraform_api);
     };
 }
 #[doc(inline)]
-pub(crate) use __export_tofuya_gitlab_impl as export;
+pub(crate) use __export_gitlab_provider_impl as export;
 #[cfg(target_arch = "wasm32")]
-#[unsafe(link_section = "component-type:wit-bindgen:0.41.0:component:tofuya-wasi-gitlab:tofuya-gitlab:encoded world")]
+#[unsafe(
+    link_section = "component-type:wit-bindgen:0.41.0:tofuya:provider-gitlab:gitlab-provider:encoded world"
+)]
 #[doc(hidden)]
 #[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 298] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xa6\x01\x01A\x02\x01\
-A\x02\x01B\x05\x01ks\x01ps\x01j\x01\x01\x01s\x01@\x03\x07api-urls\x0cproject-pat\
-hs\x0aauth-token\0\0\x02\x04\0\x0fget-state-names\x01\x03\x04\0!component:tofuya\
--wasi-gitlab/tofu\x05\0\x04\0*component:tofuya-wasi-gitlab/tofuya-gitlab\x04\0\x0b\
-\x13\x01\0\x0dtofuya-gitlab\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dw\
-it-component\x070.227.1\x10wit-bindgen-rust\x060.41.0";
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 340] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xce\x01\x01A\x02\x01\
+A\x02\x01B\x07\x01ks\x01r\x02\x07api-urls\x0aauth-token\0\x04\0\x11connection-co\
+nfig\x03\0\x01\x01ps\x01j\x01\x03\x01s\x01@\x02\x06config\x02\x0cproject-paths\0\
+\x04\x04\0\x0fget-state-names\x01\x05\x04\0+tofuya:provider-gitlab/gitlab-terraf\
+orm-api\x05\0\x04\0&tofuya:provider-gitlab/gitlab-provider\x04\0\x0b\x15\x01\0\x0f\
+gitlab-provider\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\
+\x070.227.1\x10wit-bindgen-rust\x060.41.0";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {

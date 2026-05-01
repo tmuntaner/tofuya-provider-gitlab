@@ -1,6 +1,6 @@
-use crate::bindings::exports::component::tofuya_wasi_gitlab::tofu::Guest;
 use crate::models::GraphQlResponse;
 use waki::Client;
+use crate::bindings::exports::tofuya::provider_gitlab::gitlab_terraform_api::{ConnectionConfig, Guest};
 
 #[allow(warnings)]
 mod bindings;
@@ -10,9 +10,8 @@ struct Component;
 
 impl Guest for Component {
     fn get_state_names(
-        api_url: String,
+        config: ConnectionConfig,
         project_path: String,
-        auth_token: Option<String>,
     ) -> Result<Vec<String>, String> {
         let query = format!(
             r#"query {{ project(fullPath: "{project_path}") {{ terraformStates {{ nodes {{ name }} }} }} }}"#
@@ -25,12 +24,12 @@ impl Guest for Component {
 
         let mut headers_list = vec![("Content-Type", b"application/json".to_vec())];
 
-        if let Some(token) = auth_token {
+        if let Some(token) = config.auth_token {
             headers_list.push(("Authorization", format!("Bearer {}", token).into_bytes()));
         }
 
         let response = Client::new()
-            .post(api_url.as_str())
+            .post(config.api_url.as_str())
             .headers(headers_list)
             .body(payload.as_bytes())
             .send()
