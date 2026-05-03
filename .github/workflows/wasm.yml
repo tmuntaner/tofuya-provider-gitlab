@@ -23,10 +23,6 @@ jobs:
           targets: wasm32-wasip1, wasm32-wasip2
       - name: Build the Wasm Component
         run: cargo component build --release
-      - name: Build WIT
-        shell: bash
-        run: |
-          wkg wit build --wit-dir wit -o tofuya-provider-gitlab-interface.wasm
       - name: Login to GitHub Container Registry
         uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
         with:
@@ -42,11 +38,4 @@ jobs:
           file: 'target/wasm32-wasip1/release/tofuya_provider_gitlab.wasm'
           oci-description: 'Gitlab library for tofuya plugins'
           oci-reference-without-tag: 'ghcr.io/tmuntaner/tofuya-provider-gitlab'
-          version: ${{ steps.version.outputs.VERSION }}
-      - name: Publish WIT
-        uses: ./.github/actions/wit
-        with:
-          file: 'tofuya-provider-gitlab-interface.wasm'
-          oci-description: 'WIT for tofuya-provider-gitlab'
-          oci-reference-without-tag: 'ghcr.io/tmuntaner/tofuya-provider-gitlab-interface'
           version: ${{ steps.version.outputs.VERSION }}
