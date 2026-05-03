@@ -1,10 +1,13 @@
 use crate::models::GraphQlResponse;
 use waki::Client;
-use crate::bindings::exports::tofuya::provider_gitlab::gitlab_terraform_api::{ConnectionConfig, Guest};
+use crate::exports::tofuya::provider_gitlab::gitlab_terraform_api::{ConnectionConfig, Guest};
 
-#[allow(warnings)]
-mod bindings;
 pub(crate) mod models;
+
+wit_bindgen::generate!({
+    world: "gitlab-provider",
+    path: "wit",
+});
 
 struct Component;
 
@@ -72,4 +75,4 @@ impl Guest for Component {
     }
 }
 
-bindings::export!(Component with_types_in bindings);
+export!(Component);
