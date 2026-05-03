@@ -1,4 +1,4 @@
-package tofuya:provider-gitlab;
+package tofuya:provider-gitlab@0.1.0;
 
 interface gitlab-terraform-api {
     record connection-config {
